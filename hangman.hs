@@ -68,7 +68,7 @@ guessct = do
   if guess == "a"
     -- cat
     then
-      putStrLn ("   c a t")
+      putStrLn ("   c a t" ++ "\n" ++ "Congratulations, you won!")
     else guy3
 
 ------------------------------- _ A _
