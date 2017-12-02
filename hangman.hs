@@ -16,26 +16,141 @@ start = do
     putStrLn "   |   |______"
     putStrLn "   |__________|"
     putStrLn "\n"
-    putStrLn "   _ _ _ _ _ _ _ _" -- keyboard
+    putStrLn "   _ _ _" -- cat
     guess <- getLine
     putStrLn ("User input: " ++ guess)
-    if guess == "k"
-      then putStrLn ("   k _ _ _ _ _ _ _")
-      else if guess == "e"
-        then putStrLn ("   _ e _ _ _ _ _ _")
-        else if guess == "y"
-          then putStrLn ("   _ _ y _ _ _ _ _")
-          else if guess == "b"
-            then putStrLn ("   _ _ _ b _ _ _ _")
-            else if guess == "o"
-              then putStrLn ("   _ _ _ _ o _ _ _")
-              else if guess == "a"
-                then putStrLn ("   _ _ _ _ _ a _ _")
-                else if guess == "r"
-                  then putStrLn ("   _ _ _ _ _ _ r _")
-                  else if guess == "d"
-                    then putStrLn ("   _ _ _ _ _ _ _ d")
-                    else guy1
+    if guess == "c"
+      -- c
+      then guessc
+      -- a
+      else if guess == "a"
+        then guessa
+      -- t
+        else if guess == "t"
+          then guesst
+      else guy1
+
+------------------------------- C _ _
+
+guessc :: IO()
+guessc = do
+  putStrLn ("   c _ _")
+  guess <- getLine
+  putStrLn ("User input: " ++ guess)
+  if guess == "a"
+    -- ca
+    then guessca
+    -- ct
+    else if guess == "t"
+      then guessct
+    else guy2
+
+-- C A _
+
+guessca :: IO()
+guessca = do
+  putStrLn ("   c a _")
+  guess <- getLine
+  putStrLn ("User input: " ++ guess)
+  if guess == "t"
+    -- cat
+    then
+      putStrLn ("   c a t" ++ "\n" ++ "Congratulations, you won!")
+    else guy3
+
+-- C _ T
+
+guessct :: IO()
+guessct = do
+  putStrLn ("   c _ t")
+  guess <- getLine
+  putStrLn ("User input: " ++ guess)
+  if guess == "a"
+    -- cat
+    then
+      putStrLn ("   c a t")
+    else guy3
+
+------------------------------- _ A _
+guessa :: IO()
+guessa = do
+  putStrLn ("   _ a _")
+  guess <- getLine
+  putStrLn ("User input: " ++ guess)
+  if guess == "c"
+    -- ca
+    then guessac
+    -- ct
+    else if guess == "t"
+      then guessat
+    else guy2
+
+-- C A _
+
+guessac :: IO()
+guessac = do
+  putStrLn ("   c a _")
+  guess <- getLine
+  putStrLn ("User input: " ++ guess)
+  if guess == "t"
+    -- cat
+    then
+      putStrLn ("   c a t" ++ "\n" ++ "Congratulations, you won!")
+    else guy3
+
+-- _ A T
+
+guessat :: IO()
+guessat = do
+  putStrLn ("   _ a t")
+  guess <- getLine
+  putStrLn ("User input: " ++ guess)
+  if guess == "c"
+    -- cat
+    then
+      putStrLn ("   c a t" ++ "\n" ++ "Congratulations, you won!")
+    else guy3
+
+-- _ _ T
+
+guesst :: IO()
+guesst = do
+  putStrLn ("   _ _ t")
+  guess <- getLine
+  putStrLn ("User input: " ++ guess)
+  if guess == "c"
+    -- ca
+    then guesstc
+    -- ct
+    else if guess == "a"
+      then guessta
+    else guy2
+
+-- C _ T
+
+guesstc :: IO()
+guesstc = do
+  putStrLn ("   c _ t")
+  guess <- getLine
+  putStrLn ("User input: " ++ guess)
+  if guess == "a"
+    -- cat
+    then
+      putStrLn ("   c a t" ++ "\n" ++ "Congratulations, you won!")
+    else guy3
+
+-- _ A T
+
+guessta :: IO()
+guessta = do
+  putStrLn ("   _ a t")
+  guess <- getLine
+  putStrLn ("User input: " ++ guess)
+  if guess == "c"
+    -- cat
+    then
+      putStrLn ("   c a t" ++ "\n" ++ "Congratulations, you won!")
+    else guy3
 
 ------------- HANGMAN IMAGES
 
