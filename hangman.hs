@@ -1,21 +1,23 @@
--- type start to begin the game
+-- create a record of the state of the game; how many guesses remain
+data State = State { guessesLeft :: Integer }
 
-start :: IO ()
-start = do
+drawMan :: State -> IO()
+drawMan gs = do
+  case guessesLeft gs of
+    6 -> guy0;
+    5 -> guy1;
+    4 -> guy2;
+    3 -> guy3;
+    2 -> guy4;
+    1 -> guy5;
+    0 -> guy6;
+
+main :: IO ()
+main = do
     putStrLn "\n"
     putStrLn "Welcome to Haskell Hangman!"
     putStrLn "Guess the word and don't let the poor guy die."
     putStrLn "Type one letter at a time."
-    putStrLn "      _______"
-    putStrLn "     |"
-    putStrLn "     |"
-    putStrLn "     |"
-    putStrLn "     |"
-    putStrLn "     |"
-    putStrLn "    _|_"
-    putStrLn "   |   |______"
-    putStrLn "   |__________|"
-    putStrLn "\n"
     putStrLn "   _ _ _" -- cat
     guess <- getLine
     putStrLn ("User input: " ++ guess)
@@ -154,80 +156,93 @@ guessta = do
 
 ------------- HANGMAN IMAGES
 
+guy0 :: IO()
+guy0 = do
+  putStrLn("      _______")
+  putStrLn("     |")
+  putStrLn("     |")
+  putStrLn("     |")
+  putStrLn("     |")
+  putStrLn("     |")
+  putStrLn("    _|_")
+  putStrLn("   |   |______")
+  putStrLn("   |__________|")
+  putStrLn("\n")
+
 guy1 :: IO()
 guy1 = do
   putStrLn("      _______")
   putStrLn("     |       |")
-  putStrLn( "     |      (_)")
-  putStrLn( "     |")
-  putStrLn( "     |")
-  putStrLn( "     |")
-  putStrLn( "    _|_")
-  putStrLn( "   |   |______")
-  putStrLn( "   |__________|")
-  putStrLn( "\n")
+  putStrLn("     |      (_)")
+  putStrLn("     |")
+  putStrLn("     |")
+  putStrLn("     |")
+  putStrLn("    _|_")
+  putStrLn("   |   |______")
+  putStrLn("   |__________|")
+  putStrLn("\n")
 
 guy2 :: IO ()
 guy2 = do
-  putStrLn "      _______"
-  putStrLn "     |       |"
-  putStrLn "     |      (_)"
-  putStrLn "     |       |"
-  putStrLn "     |"
-  putStrLn "     |"
-  putStrLn "    _|_"
-  putStrLn "   |   |______"
-  putStrLn "   |__________|"
-  putStrLn "\n"
+  putStrLn("      _______")
+  putStrLn("     |       |")
+  putStrLn("     |      (_)")
+  putStrLn("     |       |")
+  putStrLn("     |")
+  putStrLn("     |")
+  putStrLn("    _|_")
+  putStrLn("   |   |______")
+  putStrLn("   |__________|")
+  putStrLn("\n")
 
 guy3 :: IO ()
 guy3 = do
-  putStrLn "      _______"
-  putStrLn "     |       |"
-  putStrLn "     |      (_)"
-  putStrLn "     |      /|"
-  putStrLn "     |"
-  putStrLn "     |"
-  putStrLn "    _|_"
-  putStrLn "   |   |______"
-  putStrLn "   |__________|"
-  putStrLn "\n"
+  putStrLn("      _______")
+  putStrLn("     |       |")
+  putStrLn("     |      (_)")
+  putStrLn("     |      /|")
+  putStrLn("     |")
+  putStrLn("     |")
+  putStrLn("    _|_")
+  putStrLn("   |   |______")
+  putStrLn("   |__________|")
+  putStrLn("\n")
 
 guy4 :: IO ()
 guy4 = do
-  putStrLn "      _______"
-  putStrLn "     |       |"
-  putStrLn "     |      (_)"
-  putStrLn "     |      /|\\"
-  putStrLn "     |"
-  putStrLn "     |"
-  putStrLn "    _|_"
-  putStrLn "   |   |______"
-  putStrLn "   |__________|"
-  putStrLn "\n"
+  putStrLn("      _______")
+  putStrLn("     |       |")
+  putStrLn("     |      (_)")
+  putStrLn("     |      /|\\")
+  putStrLn("     |")
+  putStrLn("     |")
+  putStrLn("    _|_")
+  putStrLn("   |   |______")
+  putStrLn("   |__________|")
+  putStrLn("\n")
 
 guy5 :: IO ()
 guy5 = do
-  putStrLn "      _______"
-  putStrLn "     |       |"
-  putStrLn "     |      (_)"
-  putStrLn "     |      /|\\"
-  putStrLn "     |      /"
-  putStrLn "     |"
-  putStrLn "    _|_"
-  putStrLn "   |   |______"
-  putStrLn "   |__________|"
-  putStrLn "\n"
+  putStrLn("      _______")
+  putStrLn("     |       |")
+  putStrLn("     |      (_)")
+  putStrLn("     |      /|\\")
+  putStrLn("     |      /")
+  putStrLn("     |")
+  putStrLn("    _|_")
+  putStrLn("   |   |______")
+  putStrLn("   |__________|")
+  putStrLn("\n")
 
 guy6 :: IO ()
 guy6 = do
-  putStrLn "      _______"
-  putStrLn "     |       |"
-  putStrLn "     |      (_)"
-  putStrLn "     |      /|\\"
-  putStrLn "     |      / \\"
-  putStrLn "     |"
-  putStrLn "    _|_"
-  putStrLn "   |   |______"
-  putStrLn "   |__________|"
-  putStrLn "\n"
+  putStrLn("      _______")
+  putStrLn("     |       |")
+  putStrLn("     |      (_)")
+  putStrLn("     |      /|\\")
+  putStrLn("     |      / \\")
+  putStrLn("     |")
+  putStrLn("    _|_")
+  putStrLn("   |   |______")
+  putStrLn("   |__________|")
+  putStrLn("\n")
