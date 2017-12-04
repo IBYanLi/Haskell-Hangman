@@ -1,3 +1,5 @@
+import System.IO
+import Control.Exception
 import Data.Char (toLower)
 
 -- create a record of the state of the game; how many guesses remain
@@ -25,6 +27,7 @@ drawWord gs = do
   putStrLn ("   " ++ map mask (targetWord gs))
   where
     mask c 
+      | c == ' ' = ' '
       | elem c (guessedChars gs) = c -- if c is in the characters that have been guessed
       | otherwise = '_' -- otherwise, hide it
 
@@ -57,11 +60,22 @@ game gs = do
   nextState <- getNextState gs
   game nextState
 
+getWord :: IO String
+getWord = do
+  hFlush stdout
+  word <- withEcho False getLine
+  return word
+
+withEcho :: Bool -> IO a -> IO a
+withEcho echo action = do
+  old <- hGetEcho stdin
+  bracket_ (hSetEcho stdin echo) (hSetEcho stdin old) action
+
 initialize :: IO State
 initialize = do
   putStrLn "What word would you like your friend to guess?"
-  inWord <- getLine
-  let lowerWord = map toLower inWord -- for consistency sake
+  word <- getWord
+  let lowerWord = map toLower word -- for consistency sake
   return (State 6 [] lowerWord)
    -- init with 6 guesses remaining, no letters guessed yet, and the word-to-be-guessed
 
