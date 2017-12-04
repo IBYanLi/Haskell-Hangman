@@ -1,13 +1,12 @@
 import System.IO
 import Control.Exception
-import Data.Char (toLower)
+import Data.Char
 
 -- create a record of the state of the game; how many guesses remain
 data State = State 
   { guessesLeft :: Int
   , guessedChars :: String
   , targetWord :: String }
-
 
 -- draws the man to screen
 drawMan :: State -> IO ()
@@ -44,9 +43,22 @@ getGuess = do
 
 getNextState :: State -> IO State
 getNextState oldState = do
+
   -- process the guess
   c <- getGuess
-  return (State ((guessesLeft oldState) - 1) ((guessedChars oldState) ++ [c]) (targetWord oldState))
+  return (State 
+    ((guessesLeft oldState) - 1) 
+    ((guessedChars oldState) ++ [c]) 
+    (targetWord oldState))
+
+-- loop to hold player in limbo until new game
+endGame :: IO ()
+endGame = do
+  putStrLn "Game is over. Type 'restart' to play again."
+  ln <- getLine
+  if ln == "restart"
+    then main
+    else endGame
 
 -- runs the game's functionality in a loop until the end
 game :: State -> IO ()
@@ -55,36 +67,45 @@ game gs = do
   putStrLn("")
   drawWord gs
   putStrLn("")
-  
-  -- call game again with a new state updated from the old state
-  nextState <- getNextState gs
-  game nextState
 
+  if (guessesLeft gs) == 0
+    then do
+      putStrLn("You've lost! The word you were guessing is " ++ show (targetWord gs) ++ "\n")
+      endGame
+    else if all (\x -> elem x (guessedChars gs)) (targetWord gs)
+      then do
+        putStrLn("You won in " ++ show (length (guessedChars gs) - 1) ++ " guesses!\n")
+        endGame
+      else do
+        nextState <- getNextState gs
+        game nextState
+
+-- helper to set initial word-to-be-guessed
 getWord :: IO String
 getWord = do
   hFlush stdout
   word <- withEcho False getLine
   return word
 
+-- helper to handle rerouting input
 withEcho :: Bool -> IO a -> IO a
 withEcho echo action = do
   old <- hGetEcho stdin
   bracket_ (hSetEcho stdin echo) (hSetEcho stdin old) action
 
+-- create initial game state
 initialize :: IO State
 initialize = do
   putStrLn "What word would you like your friend to guess?"
   word <- getWord
   let lowerWord = map toLower word -- for consistency sake
-  return (State 6 [] lowerWord)
-   -- init with 6 guesses remaining, no letters guessed yet, and the word-to-be-guessed
+  return (State 6 " " lowerWord)
+  -- init with 6 guesses remaining
 
 main :: IO ()
 main = do
-    putStrLn "\n"
-    putStrLn "Welcome to Haskell Hangman!"
-    putStrLn "Guess the word and don't let the poor guy die."
-    putStrLn "Type one letter at a time."
+    putStrLn "\nWelcome to Haskell Hangman!"
+
     
     gs <- initialize  -- will initialize gamestate on start
     game gs -- begin the game with fresh state
