@@ -29,6 +29,22 @@ drawWord gs = do
       | otherwise = '_' -- otherwise, hide it
 
 
+getGuess :: IO Char
+getGuess = do
+  putStrLn("What is your next guess?")
+  input <- getLine
+  case input of
+    -- guess was empty, ask again
+    [] -> getGuess
+    -- get the first character only, in case of string input
+    (c : tail) -> return c
+
+getNextState :: State -> IO State
+getNextState oldState = do
+  -- process the guess
+  c <- getGuess
+  return (State ((guessesLeft oldState) - 1) ((guessedChars oldState) ++ [c]) (targetWord oldState))
+
 -- runs the game's functionality in a loop until the end
 game :: State -> IO ()
 game gs = do
@@ -36,7 +52,10 @@ game gs = do
   putStrLn("")
   drawWord gs
   putStrLn("")
-  putStrLn("What is your next guess?")
+  
+  -- call game again with a new state updated from the old state
+  nextState <- getNextState gs
+  game nextState
 
 initialize :: IO State
 initialize = do
