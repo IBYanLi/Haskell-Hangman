@@ -31,13 +31,14 @@ drawWord gs = do
       | otherwise = '_' -- otherwise, hide it
 
 
-getGuess :: IO Char
-getGuess = do
+getGuess :: String -> IO Char
+getGuess oldGuess = do
   putStrLn("What is your next guess?")
   input <- getLine
+
   case input of
     -- guess was empty, ask again
-    [] -> getGuess
+    [] -> getGuess oldGuess
     -- get the first character only, in case of string input
     (c : tail) -> return c
 
@@ -45,11 +46,19 @@ getNextState :: State -> IO State
 getNextState oldState = do
 
   -- process the guess
-  c <- getGuess
-  return (State 
-    ((guessesLeft oldState) - 1) 
-    ((guessedChars oldState) ++ [c]) 
-    (targetWord oldState))
+  c <- getGuess (guessedChars oldState)
+
+  if (elem c (targetWord oldState))
+    then do
+      return (State 
+        ((guessesLeft oldState)) 
+        ((guessedChars oldState) ++ [c]) 
+        (targetWord oldState))
+    else do
+      return (State 
+        ((guessesLeft oldState) - 1) 
+        ((guessedChars oldState) ++ [c]) 
+        (targetWord oldState))
 
 -- loop to hold player in limbo until new game
 endGame :: IO ()
