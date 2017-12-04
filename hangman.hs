@@ -22,7 +22,7 @@ drawMan gs = do
 -- draws the "_"-masked word with the new character added, or same if no match
 drawWord :: State -> IO ()
 drawWord gs = do 
-  putStrLn (map mask (targetWord gs))
+  putStrLn ("   " ++ map mask (targetWord gs))
   where
     mask c 
       | elem c (guessedChars gs) = c -- if c is in the characters that have been guessed
@@ -32,14 +32,15 @@ drawWord gs = do
 -- runs the game's functionality in a loop until the end
 game :: State -> IO ()
 game gs = do
-  drawWord gs
   drawMan gs
-  putStrLn("Guess remaining: " ++ show (guessesLeft gs))
-
+  putStrLn("")
+  drawWord gs
+  putStrLn("")
+  putStrLn("What is your next guess?")
 
 initialize :: IO State
 initialize = do
-  putStrLn "What word would you like your friend to guess?\n"
+  putStrLn "What word would you like your friend to guess?"
   inWord <- getLine
   let lowerWord = map toLower inWord -- for consistency sake
   return (State 6 [] lowerWord)
@@ -201,7 +202,6 @@ guy0 = do
   putStrLn("    _|_")
   putStrLn("   |   |______")
   putStrLn("   |__________|")
-  putStrLn("\n")
 
 guy1 :: IO ()
 guy1 = do
@@ -214,7 +214,6 @@ guy1 = do
   putStrLn("    _|_")
   putStrLn("   |   |______")
   putStrLn("   |__________|")
-  putStrLn("\n")
 
 guy2 :: IO ()
 guy2 = do
@@ -227,7 +226,6 @@ guy2 = do
   putStrLn("    _|_")
   putStrLn("   |   |______")
   putStrLn("   |__________|")
-  putStrLn("\n")
 
 guy3 :: IO ()
 guy3 = do
@@ -240,7 +238,6 @@ guy3 = do
   putStrLn("    _|_")
   putStrLn("   |   |______")
   putStrLn("   |__________|")
-  putStrLn("\n")
 
 guy4 :: IO ()
 guy4 = do
@@ -253,7 +250,6 @@ guy4 = do
   putStrLn("    _|_")
   putStrLn("   |   |______")
   putStrLn("   |__________|")
-  putStrLn("\n")
 
 guy5 :: IO ()
 guy5 = do
@@ -266,7 +262,6 @@ guy5 = do
   putStrLn("    _|_")
   putStrLn("   |   |______")
   putStrLn("   |__________|")
-  putStrLn("\n")
 
 guy6 :: IO ()
 guy6 = do
@@ -279,4 +274,3 @@ guy6 = do
   putStrLn("    _|_")
   putStrLn("   |   |______")
   putStrLn("   |__________|")
-  putStrLn("\n")
