@@ -1,7 +1,14 @@
--- create a record of the state of the game; how many guesses remain
-data State = State { guessesLeft :: Integer }
+import Data.Char (toLower)
 
-drawMan :: State -> IO()
+-- create a record of the state of the game; how many guesses remain
+data State = State 
+  { guessesLeft :: Int
+  , guessedChars :: String
+  , targetWord :: String }
+
+
+-- draws the man to screen
+drawMan :: State -> IO ()
 drawMan gs = do
   case guessesLeft gs of
     6 -> guy0;
@@ -12,25 +19,52 @@ drawMan gs = do
     1 -> guy5;
     0 -> guy6;
 
+-- draws the "_"-masked word with the new character added, or same if no match
+drawWord :: State -> IO ()
+drawWord gs = do 
+  putStrLn (map mask (targetWord gs))
+  where
+    mask c 
+      | elem c (guessedChars gs) = c -- if c is in the characters that have been guessed
+      | otherwise = '_' -- otherwise, hide it
+
+
+-- runs the game's functionality in a loop until the end
+game :: State -> IO ()
+game gs = do
+  drawWord gs
+  drawMan gs
+  putStrLn("Guess remaining: " ++ show (guessesLeft gs))
+
+
+initialize :: IO State
+initialize = do
+  putStrLn "What word would you like your friend to guess?\n"
+  inWord <- getLine
+  let lowerWord = map toLower inWord -- for consistency sake
+  return (State 6 [] lowerWord)
+   -- init with 6 guesses remaining, no letters guessed yet, and the word-to-be-guessed
+
 main :: IO ()
 main = do
     putStrLn "\n"
     putStrLn "Welcome to Haskell Hangman!"
     putStrLn "Guess the word and don't let the poor guy die."
     putStrLn "Type one letter at a time."
-    putStrLn "   _ _ _" -- cat
-    guess <- getLine
-    putStrLn ("User input: " ++ guess)
-    if guess == "c"
-      -- c
-      then guessc
-      -- a
-      else if guess == "a"
-        then guessa
-      -- t
-        else if guess == "t"
-          then guesst
-      else guy1
+    
+    gs <- initialize  -- will initialize gamestate on start
+    game gs -- begin the game with fresh state
+
+    -- if guess == "c"
+    --   -- c
+    --   then guessc
+    --   -- a
+    --   else if guess == "a"
+    --     then guessa
+    --   -- t
+    --     else if guess == "t"
+    --       then guesst
+    --   else guy1
 
 ------------------------------- C _ _
 
@@ -156,7 +190,7 @@ guessta = do
 
 ------------- HANGMAN IMAGES
 
-guy0 :: IO()
+guy0 :: IO ()
 guy0 = do
   putStrLn("      _______")
   putStrLn("     |")
@@ -169,7 +203,7 @@ guy0 = do
   putStrLn("   |__________|")
   putStrLn("\n")
 
-guy1 :: IO()
+guy1 :: IO ()
 guy1 = do
   putStrLn("      _______")
   putStrLn("     |       |")

@@ -1,1 +1,4 @@
 *.idea
+/hangman.o
+/hangman.hi
+/hangman
